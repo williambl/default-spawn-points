@@ -1,6 +1,7 @@
 package com.williambl.defaultspawnpoints;
 
 import com.williambl.defaultspawnpoints.mixin.ServerPlayerEntityAccessor;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.minecraft.server.command.ServerCommandSource;
@@ -23,22 +24,23 @@ public class DefaultSpawnPoints implements ModInitializer {
 	public void onInitialize() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			dispatcher.register((literal("defaultspawnpoint")
-					.requires((serverCommandSource) -> serverCommandSource.hasPermissionLevel(2)))
-					.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), Collections.singleton(ctx.getSource().getPlayer()), new BlockPos(ctx.getSource().getPosition()), 0.0F))
+					.requires(Permissions.require("commands.defaultspawnpoint", 2))
 
 					.then(
-						literal("set").then(
-							(argument("targets", players())
-							.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), new BlockPos(ctx.getSource().getPosition()), 0.0F)))
-
+						literal("set")
+							.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), Collections.singleton(ctx.getSource().getPlayer()), new BlockPos(ctx.getSource().getPosition()), 0.0F))
 							.then(
-								(argument("pos", blockPos())
-								.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), getBlockPos(ctx, "pos"), 0.0F)))
+								(argument("targets", players())
+								.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), new BlockPos(ctx.getSource().getPosition()), 0.0F)))
 
 								.then(
-									argument("angle", angle())
-									.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), getBlockPos(ctx, "pos"), getAngle(ctx, "angle")))
-								)
+									(argument("pos", blockPos())
+									.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), getBlockPos(ctx, "pos"), 0.0F)))
+
+									.then(
+										argument("angle", angle())
+										.executes(ctx -> setDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"), getBlockPos(ctx, "pos"), getAngle(ctx, "angle")))
+									)
 							)
 						)
 					)
@@ -48,7 +50,7 @@ public class DefaultSpawnPoints implements ModInitializer {
 							.executes(ctx -> unsetDefaultSpawnPoint(ctx.getSource(), getPlayers(ctx, "targets"))))
 						)
 					)
-			);
+			));
 		});
 	}
 
