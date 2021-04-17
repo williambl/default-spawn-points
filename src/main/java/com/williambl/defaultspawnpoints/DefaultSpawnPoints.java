@@ -24,7 +24,7 @@ public class DefaultSpawnPoints implements ModInitializer {
 	public void onInitialize() {
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
 			dispatcher.register((literal("defaultspawnpoint")
-					.requires(Permissions.require("commands.defaultspawnpoint", 2))
+					.requires(Permissions.require("command.defaultspawnpoint", 2))
 
 					.then(
 						literal("set")
