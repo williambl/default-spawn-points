@@ -4,13 +4,13 @@
   "version": "${version}",
 
   "name": "Default Spawn Points",
-  "description": "Adds better default spawn point handling",
+  "description": "Adds per-player default spawn point handling",
   "authors": [
     "Will BL"
   ],
   "contact": {
-    "homepage": "",
-    "sources": ""
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/defaultspawnpoints",
+    "sources": "https://github.com/williambl/default-spawn-points"
   },
 
   "license": "MIT",
@@ -29,7 +29,8 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
-    "minecraft": ">=1.16.2"
+    "minecraft": ">=1.16.2",
+    "fabric-permissions-api-v0": "*"
   },
   "suggests": {
   }
