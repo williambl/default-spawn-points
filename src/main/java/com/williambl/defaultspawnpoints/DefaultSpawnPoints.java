@@ -78,7 +78,7 @@ public class DefaultSpawnPoints implements ModInitializer {
 		}
 
 		if (players.size() == 1) {
-			source.sendFeedback(new LiteralText(String.format("Unset default spawn point for %s", players.stream().findFirst().orElseThrow(NullPointerException::new).getDisplayName())), true);
+			source.sendFeedback(new LiteralText("Unset default spawn point for ").append(players.stream().findFirst().orElseThrow(NullPointerException::new).getDisplayName()), true);
 		} else {
 			source.sendFeedback(new LiteralText(String.format("Unset default spawn points for %d players", players.size())), true);
 		}
