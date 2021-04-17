@@ -4,6 +4,9 @@
   "package": "com.williambl.defaultspawnpoints.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "PlayerManagerMixin",
+    "ServerPlayerEntityAccessor",
+    "ServerPlayerEntityMixin"
   ],
   "client": [
   ],
