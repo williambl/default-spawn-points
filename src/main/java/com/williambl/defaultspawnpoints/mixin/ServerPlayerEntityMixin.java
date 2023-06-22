@@ -3,7 +3,7 @@ package com.williambl.defaultspawnpoints.mixin;
 import com.mojang.authlib.GameProfile;
 import com.williambl.defaultspawnpoints.DefaultSpawnPointOwner;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,19 +23,19 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements De
         super(world, pos, yaw, profile);
     }
 
-    @Inject(method = "readCustomDataFromTag", at = @At("TAIL"))
-    void defaultSpawnPoints$readDataFromTag(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+    void defaultSpawnPoints$readDataFromNbt(NbtCompound tag, CallbackInfo ci) {
         if (tag.contains("DefaultSpawnPoint")) {
-            CompoundTag dspTag = tag.getCompound("DefaultSpawnPoint");
+            NbtCompound dspTag = tag.getCompound("DefaultSpawnPoint");
             defaultBlockPos = getDefaultBlockPosFromTag(dspTag);
             defaultYaw = getDefaultYawFromTag(dspTag);
         }
     }
 
-    @Inject(method = "writeCustomDataToTag", at = @At("TAIL"))
-    void defaultSpawnPoints$writeDataToTag(CompoundTag tag, CallbackInfo ci) {
+    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
+    void defaultSpawnPoints$writeDataToNbt(NbtCompound tag, CallbackInfo ci) {
         if (defaultBlockPos != null || defaultYaw != null) {
-            CompoundTag dspTag = new CompoundTag();
+            NbtCompound dspTag = new NbtCompound();
             if (defaultBlockPos != null) {
                 dspTag.putInt("X", defaultBlockPos.getX());
                 dspTag.putInt("Y", defaultBlockPos.getY());
@@ -55,7 +55,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements De
     }
 
     @Unique
-    private BlockPos getDefaultBlockPosFromTag(CompoundTag tag) {
+    private BlockPos getDefaultBlockPosFromTag(NbtCompound tag) {
         if (tag.contains("X") && tag.contains("Y") && tag.contains("Z")) {
             return new BlockPos(tag.getInt("X"), tag.getInt("Y"), tag.getInt("Z"));
         }
@@ -63,7 +63,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements De
     }
 
     @Unique
-    private Float getDefaultYawFromTag(CompoundTag tag) {
+    private Float getDefaultYawFromTag(NbtCompound tag) {
         if (tag.contains("Yaw")) {
             return tag.getFloat("Yaw");
         }
